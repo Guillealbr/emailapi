@@ -1,0 +1,23 @@
+{
+    "name": "incodingemailapiapp",
+    "description": "Incoding Email API",
+    "version": "1.1.0",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js"
+    },
+      "engines": {
+    "node": "5.0.0"
+  },
+    "dependencies": {
+        "express": "4.x",
+        "body-parser": "*",
+        "postmark": "*",
+        "formidable": "*",
+        "multer": "*"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/faustocarassai/IncodingEmailAPI"
+      }
+}

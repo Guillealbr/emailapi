@@ -1,0 +1,24 @@
+{
+    "name": "emailAPI",
+    "description": "Incoding API",
+    "version": "1.0.2",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js"
+    },
+    "engines": {
+        "node": "5.0.0"
+      },
+    "dependencies": {
+        "express": "4.x",
+        "body-parser": "*",
+        "mailgun-js": "*",
+        "formidable": "*",
+        "multer": "*",
+        "mandrill-api": "*"
+    },
+    "repository": {
+        "type": "git",
+        "url": ""
+      }
+}

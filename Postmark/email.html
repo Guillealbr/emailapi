@@ -1,0 +1,119 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+ <form id="form1">
+ From: <input name="from" type="text" value="guillealbr@hotmail.com" /><br />
+  Email: <input name="to" type="text" value="guillealbr@gmail.com" /><br />
+  Subject: <input name="subject" type="text" value="pija" /><br />
+  Message:<br />
+  <textarea name="body" rows="15" cols="40" value="pijaaa"></textarea><br />
+  <input type="file" id="contentFile" multiple="multiple"/>
+  <input type="file" id="contentFile2" multiple="multiple"/>
+  <button id="sendEmail" class="btn btn-primary">Enviar</button> 
+  </form>
+
+  <script type="text/javascript">
+
+$('#sendEmail').on('click', function(ev) {
+  ev.preventDefault();
+
+  var files1 = $("#contentFile")[0].files;
+  var files2 = $("#contentFile2")[0].files;
+
+var attachments=[];
+
+var archivo1 = { then: function(resolve) {
+                  if(files1.length == 0)
+                    resolve();
+
+                    var name= files1[0].name;
+                    var type= files1[0].type
+                    getBase64(files1[0]).then(function(result){
+                      var attach = {
+                        Name: name,
+                        Content: result,
+                        ContentType: type
+                      }
+
+                      attachments.push(attach);
+                      resolve();
+                    });
+
+
+            }
+        };
+
+var archivo2 = { then: function(resolve) {
+                  if(files2.length == 0)
+                    resolve();
+
+                    var name= files2[0].name;
+                    var type= files2[0].type
+                    getBase64(files2[0]).then(function(result){
+
+
+                      var attach = {
+                        Name: name,
+                        Content: result,
+                        ContentType: type
+                      }
+
+                      attachments.push(attach);
+                      resolve();
+                    });
+
+
+            }
+        };
+
+
+Promise.all([archivo1, archivo2]).then(function(results){
+  var email = {
+        from: $('#form1')[0].from.value,
+        to: $('#form1')[0].to.value,
+        subject: $('#form1')[0].subject.value,
+        htmlBody: $('#form1')[0].body.value,
+        Attachments: attachments
+    }
+    $.ajax({
+        type: 'POST',
+        url: 'http://localhost:8093/Api/email',
+        dataType: 'JSON',
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(email),
+        success: function (data) {
+            console.log(data);
+
+        },
+        error: function (response,a,b) {
+            console.log(response.responseText);
+        }
+
+    });
+});
+
+    return true;   
+});
+
+function getBase64(file) {
+    var dfd = jQuery.Deferred();
+     var reader = new FileReader();
+     reader.readAsDataURL(file);
+     reader.onload = function () {
+      var results= reader.result.split(',');
+
+    if(results.length > 1)  
+      dfd.resolve(results[1]);
+
+    dfd.resolve(results[0]);
+   };
+   reader.onerror = function (error) {
+     console.log('Error: ', error);
+   };
+   return dfd.promise();
+}
+
+
+
+</script>
+
+  
